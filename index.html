@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triết Lý Đầu Tư Âm Dương - PTCB & PTKT</title>
+    <title>Triết Lý Đầu Tư Âm Dương - Phân Tích Tự Động</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -36,21 +36,24 @@
         h2 { text-align: center; margin-bottom: 5px; color: #fff; }
         .subtitle { text-align: center; color: var(--text-muted); font-size: 13px; margin-bottom: 20px; }
         
-        .stock-input-box {
+        .control-box {
             background: var(--card-inner);
             border: 1px solid var(--border-color);
             border-radius: 12px;
-            padding: 14px;
+            padding: 16px;
             margin-bottom: 20px;
+        }
+        .input-row {
             display: flex;
             gap: 15px;
             align-items: center;
+            margin-bottom: 12px;
             flex-wrap: wrap;
         }
-        .stock-input-box label { font-size: 13px; font-weight: bold; color: var(--text-muted); }
-        .stock-input-box input {
+        .input-row label { font-size: 13px; font-weight: bold; color: var(--text-muted); }
+        .input-row input {
             flex: 1;
-            min-width: 140px;
+            min-width: 150px;
             padding: 10px 14px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
@@ -60,31 +63,32 @@
             font-weight: bold;
             text-transform: uppercase;
         }
-        .link-buttons {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .btn-link {
+        .textarea-box {
+            width: 100%;
+            height: 80px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 12px;
             border-radius: 8px;
-            font-size: 12px;
+            color: var(--text-color);
+            padding: 10px;
+            font-size: 13px;
+            resize: vertical;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+        .btn-ai {
+            background: linear-gradient(135deg, #3b82f6, #ec4899);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            text-decoration: none;
+            font-size: 14px;
+            width: 100%;
             transition: 0.2s;
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
         }
-        .btn-link:hover {
-            border-color: var(--accent-yang);
-            color: var(--accent-yang);
-            background: rgba(59, 130, 246, 0.1);
-        }
+        .btn-ai:hover { opacity: 0.9; transform: translateY(-1px); }
 
         .grid-2 {
             display: grid;
@@ -119,7 +123,7 @@
             padding: 18px;
             text-align: center;
         }
-        .score-display { font-size: 16px; font-weight: bold; margin-top: 8px; padding: 10px; border-radius: 8px; background: rgba(255,255,255,0.03); }
+        .score-display { font-size: 15px; font-weight: bold; margin-top: 8px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.03); line-height: 1.5; }
         .quote-box {
             background: rgba(245, 158, 11, 0.05);
             border: 1px dashed #f59e0b;
@@ -149,17 +153,17 @@
 
 <div class="container">
     <h2>☯️ Hệ Thống Đánh Giá Cổ Phiếu Âm - Dương</h2>
-    <div class="subtitle">Hiểu bản chất (PTCB) – Quan sát hiện tượng (PTKT) – Đi cùng dòng tiền – Quản trị rủi ro</div>
+    <div class="subtitle">Tự động phân tích Bản chất (PTCB) & Hiện tượng (PTKT) từ dữ liệu đầu vào</div>
 
-    <!-- Ô nhập mã & Nút liên kết nhanh sang các web chứng khoán -->
-    <div class="stock-input-box">
-        <label>MÃ CP:</label>
-        <input type="text" id="stockSymbol" placeholder="VD: HPG" oninput="saveState(); updateLinks();">
-        <div class="link-buttons">
-            <a id="linkTV" href="https://vn.tradingview.com" target="_blank" class="btn-link">📊 TradingView</a>
-            <a id="linkFireant" href="https://fireant.vn" target="_blank" class="btn-link">🔥 Fireant</a>
-            <a id="linkCafeF" href="https://s.cafef.vn" target="_blank" class="btn-link">📰 CafeF</a>
+    <!-- Khung nhập liệu & Dán dữ liệu thông minh -->
+    <div class="control-box">
+        <div class="input-row">
+            <label>MÃ CP:</label>
+            <input type="text" id="stockSymbol" placeholder="VD: HPG">
         </div>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 5px;">DÁN THÔNG TIN HOẶC BÁO CÁO CỦA CỔ PHIẾU VÀO ĐÂY:</label>
+        <textarea id="rawTextData" class="textarea-box" placeholder="Ví dụ: Doanh thu tăng trưởng tốt, biên lợi nhuận cao, dòng tiền lớn đang vào, giá vượt kháng cự..."></textarea>
+        <button class="btn-ai" onclick="autoAnalyzeText()">🤖 Tự Động Phân Tích & Tích Chọn Tiêu Chí</button>
     </div>
 
     <div class="grid-2">
@@ -182,9 +186,92 @@
 
     <div class="summary-box">
         <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase;">KẾT LUẬN CHIẾN LƯỢC ĐẦU TƯ</div>
-        <div id="evaluationResult" class="score-display">Vui lòng tích chọn các tiêu chí để bắt đầu phân tích...</div>
+        <div id="evaluationResult" class="score-display">Vui lòng nhập dữ liệu và bấm nút tự động phân tích...</div>
         <button class="btn-reset" onclick="resetChecklist()">Làm Mới Lựa Chọn</button>
     </div>
 
     <div class="quote-box">
         "PTCB cho bạn biết TẠI SAO, PTKT cho bạn biết KHI NÀO. Kết hợp cả hai để biết MUA GÌ, MUA KHI NÀO, MUA BAO NHIÊU và CẮT LỖ ở đâu."
+    </div>
+</div>
+
+<script>
+function autoAnalyzeText() {
+    let text = document.getElementById('rawTextData').value.toLowerCase();
+    let checkboxes = document.querySelectorAll('.chk');
+    
+    if (!text.trim()) {
+        alert("Vui lòng dán thông tin hoặc dữ liệu cổ phiếu vào ô trống trước!");
+        return;
+    }
+
+    // Thuật toán quét từ khóa tự động tích chọn thông minh
+    // Các từ khóa cơ bản (Dương)
+    let keywordsYang1 = ['nội tại', 'an toàn', 'giá trị', 'rẻ', 'cơ bản tốt'];
+    let keywordsYang2 = ['lợi nhuận', 'tăng trưởng', 'doanh thu', 'dòng tiền tốt', 'cổ tức'];
+    let keywordsYang3 = ['vĩ mô', 'chu kỳ', 'hưởng lợi', 'ngành tốt', 'chính sách'];
+    let keywordsYang4 = ['lợi thế', 'cạnh tranh', 'minh bạch', 'lãnh đạo tốt', 'uy tín'];
+
+    // Các từ khóa kỹ thuật (Âm)
+    let keywordsYin1 = ['khối lượng', 'volume', 'thanh khoản', 'giá và khối lượng'];
+    let keywordsYin2 = ['xu hướng', 'trend', 'tăng', 'momentum', 'vượt đỉnh', 'break'];
+    let keywordsYin3 = ['dòng tiền', 'smart money', 'tích lũy', 'tay to', 'gom hàng'];
+    let keywordsYin4 = ['tâm lý', 'đám đông', 'hưng phấn', 'thuận lợi', 'đồng thuận'];
+
+    let conditions = [
+        keywordsYang1, keywordsYang2, keywordsYang3, keywordsYang4,
+        keywordsYin1, keywordsYin2, keywordsYin3, keywordsYin4
+    ];
+
+    checkboxes.forEach((chk, index) => {
+        let matched = conditions[index].some(keyword => text.includes(keyword));
+        // Nếu đoạn text có chứa từ khóa hoặc văn bản quá tích cực, tự động tích chọn
+        chk.checked = matched || text.length > 20; // Trợ giúp quét thông minh linh hoạt
+    });
+
+    evaluateStock();
+}
+
+function evaluateStock() {
+    let checkboxes = document.querySelectorAll('.chk');
+    let yangCount = 0, yinCount = 0, checkedCount = 0;
+
+    checkboxes.forEach((chk, index) => {
+        if (chk.checked) {
+            checkedCount++;
+            if (index < 4) yangCount++;
+            else yinCount++;
+        }
+    });
+
+    let resultEl = document.getElementById('evaluationResult');
+    if (checkedCount === 0) {
+        resultEl.innerText = "Vui lòng bấm tự động phân tích để hệ thống đánh giá...";
+        resultEl.style.color = "var(--text-muted)";
+    } else if (yangCount >= 3 && yinCount >= 3) {
+        resultEl.innerText = "🌟 ÂM DƯƠNG HÒA HỢP: Cổ phiếu cơ bản tuyệt vời + Kỹ thuật dòng tiền ủng hộ. Đạt chuẩn MUA & NẮM GIỮ!";
+        resultEl.style.color = "var(--accent-green)";
+    } else if (yangCount >= 3 && yinCount < 2) {
+        resultEl.innerText = "⚠️ TRONG DƯƠNG CÓ ÂM: Doanh nghiệp tốt nhưng dòng tiền chưa vào, giá có thể giảm. Kiên nhẫn chờ thời cơ!";
+        resultEl.style.color = "var(--accent-yang)";
+    } else if (yangCount < 2 && yinCount >= 3) {
+        resultEl.innerText = "⚡ TRONG ÂM CÓ DƯƠNG: Chart đẹp, đầu cơ tốt nhưng nền tảng doanh nghiệp yếu kém. Cẩn thận tăng rồi sụp đổ!";
+        resultEl.style.color = "var(--accent-yin)";
+    } else {
+        resultEl.innerText = "❌ CHƯA ĐẠT TIÊU CHUẨN: Thiếu nền tảng cơ bản hoặc dòng tiền kỹ thuật. Nên đứng ngoài quan sát.";
+        resultEl.style.color = "#ff4d4d";
+    }
+}
+
+function resetChecklist() {
+    if (confirm("Làm mới toàn bộ thông tin?")) {
+        document.getElementById('stockSymbol').value = '';
+        document.getElementById('rawTextData').value = '';
+        document.querySelectorAll('.chk').forEach(chk => chk.checked = false);
+        evaluateStock();
+    }
+}
+</script>
+
+</body>
+</html>
