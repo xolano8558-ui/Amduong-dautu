@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triết Lý Đầu Tư Âm Dương - AI Vision Phân Tích BCTC</title>
+    <title>Triết Lý Đầu Tư Âm Dương - Phân Tích Chi Tiết</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -14,6 +14,7 @@
             --accent-yang: #3b82f6;
             --accent-yin: #ec4899;
             --accent-green: #00b894;
+            --accent-red: #ef4444;
             --border-color: #374151;
         }
         body {
@@ -65,16 +66,13 @@
         }
         .upload-section {
             border: 2px dashed var(--border-color);
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             text-align: center;
             background: var(--bg-color);
             margin-bottom: 12px;
         }
-        .upload-section input[type="file"] {
-            color: var(--text-muted);
-            font-size: 13px;
-        }
+        .upload-section input[type="file"] { color: var(--text-muted); font-size: 13px; }
         .btn-ai {
             background: linear-gradient(135deg, #3b82f6, #ec4899);
             color: white;
@@ -115,14 +113,28 @@
             line-height: 1.4;
         }
         .checklist-item input { width: 18px; height: 18px; accent-color: var(--accent-green); cursor: pointer; margin-top: 1px; }
+        
         .summary-box {
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 18px;
-            text-align: center;
+            text-align: left;
         }
-        .score-display { font-size: 15px; font-weight: bold; margin-top: 8px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.03); line-height: 1.5; }
+        .score-display { font-size: 15px; font-weight: bold; margin-top: 8px; padding: 12px; border-radius: 8px; background: rgba(255,255,255,0.03); line-height: 1.6; }
+        
+        .summary-list {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            font-size: 13px;
+        }
+        @media(max-width: 768px) { .summary-list { grid-template-columns: 1fr; } }
+        .summary-col { background: var(--card-inner); padding: 12px; border-radius: 8px; border: 1px solid var(--border-color); }
+        .summary-col h4 { margin: 0 0 8px 0; font-size: 13px; text-transform: uppercase; }
+        .summary-col ul { margin: 0; padding-left: 18px; line-height: 1.5; color: var(--text-muted); }
+
         .quote-box {
             background: rgba(245, 158, 11, 0.05);
             border: 1px dashed #f59e0b;
@@ -144,6 +156,9 @@
             border-radius: 6px;
             cursor: pointer;
             font-size: 12px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
         .btn-reset:hover { border-color: #ff4d4d; color: #ff4d4d; }
     </style>
@@ -152,118 +167,4 @@
 
 <div class="container">
     <h2>☯️ Hệ Thống Đánh Giá Cổ Phiếu Âm - Dương</h2>
-    <div class="subtitle">AI Vision - Tự động đọc và phân tích BCTC & Biểu đồ kỹ thuật</div>
-
-    <div class="control-box">
-        <div class="input-row">
-            <label>MÃ CP:</label>
-            <input type="text" id="stockSymbol" placeholder="VD: HPG">
-        </div>
-        
-        <div class="upload-section">
-            <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 8px;">TẢI ẢNH BÁO CÁO TÀI CHÍNH HOẶC BIỂU ĐỒ KỸ THUẬT:</label>
-            <input type="file" id="imageInput" accept="image/*">
-        </div>
-
-        <button class="btn-ai" onclick="analyzeImageWithAI()">🤖 Gửi AI Phân Tích Hình Ảnh BCTC</button>
-    </div>
-
-    <div class="grid-2">
-        <div class="card yang">
-            <div class="card-title">📈 DƯƠNG - Phân Tích Cơ Bản (Gốc Cây)</div>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Doanh nghiệp có giá trị nội tại tốt, biên an toàn cao</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Lợi nhuận và dòng tiền hoạt động tăng trưởng đều</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Hưởng lợi từ vĩ mô và chu kỳ ngành</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Có lợi thế cạnh tranh và ban lãnh đạo minh bạch</label>
-        </div>
-
-        <div class="card yin">
-            <div class="card-title">📉 ÂM - Phân Tích Kỹ Thuật (Tán Cây)</div>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Biểu đồ giá và khối lượng (Volume) ủng hộ xu hướng</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Đang nằm trong xu hướng tăng (Trend & Momentum rõ ràng)</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Dòng tiền lớn đang tham gia (Smart Money tích lũy)</label>
-            <label class="checklist-item"><input type="checkbox" class="chk" onclick="evaluateStock()"> Tâm lý thị trường/đám đông thuận lợi cho điểm mua</label>
-        </div>
-    </div>
-
-    <div class="summary-box">
-        <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase;">KẾT LUẬN CHIẾN LƯỢC ĐẦU TƯ</div>
-        <div id="evaluationResult" class="score-display">Vui lòng tải ảnh BCTC lên và bấm phân tích...</div>
-        <button class="btn-reset" onclick="resetChecklist()">Làm Mới Lựa Chọn</button>
-    </div>
-
-    <div class="quote-box">
-        "PTCB cho bạn biết TẠI SAO, PTKT cho bạn biết KHI NÀO. Kết hợp cả hai để biết MUA GÌ, MUA KHI NÀO, MUA BAO NHIÊU và CẮT LỖ ở đâu."
-    </div>
-</div>
-
-<script>
-function analyzeImageWithAI() {
-    let fileInput = document.getElementById('imageInput');
-    if (fileInput.files.length === 0) {
-        alert("Vui lòng chọn một hình ảnh báo cáo hoặc biểu đồ trước!");
-        return;
-    }
-
-    let btn = document.querySelector('.btn-ai');
-    btn.innerText = "⏳ AI Đang Đọc Hình Ảnh & Phân Tích...";
-    
-    // Giả lập mô phỏng AI Vision đọc hình ảnh tài chính thông minh
-    setTimeout(() => {
-        let checkboxes = document.querySelectorAll('.chk');
-        
-        // Mô phỏng AI đọc số liệu: ngẫu nhiên thông minh dựa trên kết quả thực tế thường gặp
-        checkboxes.forEach((chk, index) => {
-            // Tự động tích chọn dựa trên việc AI nhận diện các chỉ số khả quan từ ảnh
-            chk.checked = (index === 0 || index === 1 || index === 4 || index === 5); 
-        });
-
-        evaluateStock();
-        btn.innerText = "🤖 Gửi AI Phân Tích Hình Ảnh BCTC";
-        alert("AI đã đọc xong hình ảnh báo cáo và tự động đánh giá các tiêu chí Âm - Dương!");
-    }, 1500);
-}
-
-function evaluateStock() {
-    let checkboxes = document.querySelectorAll('.chk');
-    let yangCount = 0, yinCount = 0, checkedCount = 0;
-
-    checkboxes.forEach((chk, index) => {
-        if (chk.checked) {
-            checkedCount++;
-            if (index < 4) yangCount++;
-            else yinCount++;
-        }
-    });
-
-    let resultEl = document.getElementById('evaluationResult');
-    if (checkedCount === 0) {
-        resultEl.innerText = "Vui lòng tải ảnh BCTC lên và bấm phân tích...";
-        resultEl.style.color = "var(--text-muted)";
-    } else if (yangCount >= 3 && yinCount >= 3) {
-        resultEl.innerText = "🌟 ÂM DƯƠNG HÒA HỢP: Cổ phiếu cơ bản tuyệt vời + Kỹ thuật dòng tiền ủng hộ. Đạt chuẩn MUA & NẮM GIỮ!";
-        resultEl.style.color = "var(--accent-green)";
-    } else if (yangCount >= 3 && yinCount < 2) {
-        resultEl.innerText = "⚠️ TRONG DƯƠNG CÓ ÂM: Doanh nghiệp tốt nhưng dòng tiền chưa vào, giá có thể giảm. Kiên nhẫn chờ thời cơ!";
-        resultEl.style.color = "var(--accent-yang)";
-    } else if (yangCount < 2 && yinCount >= 3) {
-        resultEl.innerText = "⚡ TRONG ÂM CÓ DƯƠNG: Chart đẹp, đầu cơ tốt nhưng nền tảng doanh nghiệp yếu kém. Cẩn thận tăng rồi sụp đổ!";
-        resultEl.style.color = "var(--accent-yin)";
-    } else {
-        resultEl.innerText = "❌ CHƯA ĐẠT TIÊU CHUẨN: Thiếu nền tảng cơ bản hoặc dòng tiền kỹ thuật. Nên đứng ngoài quan sát.";
-        resultEl.style.color = "#ff4d4d";
-    }
-}
-
-function resetChecklist() {
-    if (confirm("Làm mới toàn bộ thông tin?")) {
-        document.getElementById('stockSymbol').value = '';
-        document.getElementById('imageInput').value = '';
-        document.querySelectorAll('.chk').forEach(chk => chk.checked = false);
-        evaluateStock();
-    }
-}
-</script>
-
-</body>
-</html>
+    <div class="subtitle">AI Vision - Tự
