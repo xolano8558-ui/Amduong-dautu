@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Triết Lý Đầu Tư Âm Dương - Phân Tích Tự Động</title>
+    <title>Triết Lý Đầu Tư Âm Dương - PTCB & PTKT</title>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -65,7 +65,7 @@
         }
         .textarea-box {
             width: 100%;
-            height: 80px;
+            height: 70px;
             background: var(--bg-color);
             border: 1px solid var(--border-color);
             border-radius: 8px;
@@ -88,7 +88,7 @@
             width: 100%;
             transition: 0.2s;
         }
-        .btn-ai:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-ai:hover { opacity: 0.9; }
 
         .grid-2 {
             display: grid;
@@ -153,17 +153,15 @@
 
 <div class="container">
     <h2>☯️ Hệ Thống Đánh Giá Cổ Phiếu Âm - Dương</h2>
-    <div class="subtitle">Tự động phân tích Bản chất (PTCB) & Hiện tượng (PTKT) từ dữ liệu đầu vào</div>
+    <div class="subtitle">Kết hợp phân tích cơ bản (Dương) & Kỹ thuật dòng tiền (Âm)</div>
 
-    <!-- Khung nhập liệu & Dán dữ liệu thông minh -->
     <div class="control-box">
         <div class="input-row">
             <label>MÃ CP:</label>
             <input type="text" id="stockSymbol" placeholder="VD: HPG">
         </div>
-        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 5px;">DÁN THÔNG TIN HOẶC BÁO CÁO CỦA CỔ PHIẾU VÀO ĐÂY:</label>
-        <textarea id="rawTextData" class="textarea-box" placeholder="Ví dụ: Doanh thu tăng trưởng tốt, biên lợi nhuận cao, dòng tiền lớn đang vào, giá vượt kháng cự..."></textarea>
-        <button class="btn-ai" onclick="autoAnalyzeText()">🤖 Tự Động Phân Tích & Tích Chọn Tiêu Chí</button>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 5px;">GHI CHÚ / HOẶC DÁN DỮ LIỆU ĐỂ THAM KHẢO:</label>
+        <textarea id="rawTextData" class="textarea-box" placeholder="Dán thông tin vào đây để tham khảo, hoặc bạn có thể tự tích chọn trực tiếp bên dưới..."></textarea>
     </div>
 
     <div class="grid-2">
@@ -186,7 +184,7 @@
 
     <div class="summary-box">
         <div style="font-size: 13px; color: var(--text-muted); text-transform: uppercase;">KẾT LUẬN CHIẾN LƯỢC ĐẦU TƯ</div>
-        <div id="evaluationResult" class="score-display">Vui lòng nhập dữ liệu và bấm nút tự động phân tích...</div>
+        <div id="evaluationResult" class="score-display">Vui lòng tích chọn các tiêu chí thực tế để đánh giá...</div>
         <button class="btn-reset" onclick="resetChecklist()">Làm Mới Lựa Chọn</button>
     </div>
 
@@ -196,42 +194,6 @@
 </div>
 
 <script>
-function autoAnalyzeText() {
-    let text = document.getElementById('rawTextData').value.toLowerCase();
-    let checkboxes = document.querySelectorAll('.chk');
-    
-    if (!text.trim()) {
-        alert("Vui lòng dán thông tin hoặc dữ liệu cổ phiếu vào ô trống trước!");
-        return;
-    }
-
-    // Thuật toán quét từ khóa tự động tích chọn thông minh
-    // Các từ khóa cơ bản (Dương)
-    let keywordsYang1 = ['nội tại', 'an toàn', 'giá trị', 'rẻ', 'cơ bản tốt'];
-    let keywordsYang2 = ['lợi nhuận', 'tăng trưởng', 'doanh thu', 'dòng tiền tốt', 'cổ tức'];
-    let keywordsYang3 = ['vĩ mô', 'chu kỳ', 'hưởng lợi', 'ngành tốt', 'chính sách'];
-    let keywordsYang4 = ['lợi thế', 'cạnh tranh', 'minh bạch', 'lãnh đạo tốt', 'uy tín'];
-
-    // Các từ khóa kỹ thuật (Âm)
-    let keywordsYin1 = ['khối lượng', 'volume', 'thanh khoản', 'giá và khối lượng'];
-    let keywordsYin2 = ['xu hướng', 'trend', 'tăng', 'momentum', 'vượt đỉnh', 'break'];
-    let keywordsYin3 = ['dòng tiền', 'smart money', 'tích lũy', 'tay to', 'gom hàng'];
-    let keywordsYin4 = ['tâm lý', 'đám đông', 'hưng phấn', 'thuận lợi', 'đồng thuận'];
-
-    let conditions = [
-        keywordsYang1, keywordsYang2, keywordsYang3, keywordsYang4,
-        keywordsYin1, keywordsYin2, keywordsYin3, keywordsYin4
-    ];
-
-    checkboxes.forEach((chk, index) => {
-        let matched = conditions[index].some(keyword => text.includes(keyword));
-        // Nếu đoạn text có chứa từ khóa hoặc văn bản quá tích cực, tự động tích chọn
-        chk.checked = matched || text.length > 20; // Trợ giúp quét thông minh linh hoạt
-    });
-
-    evaluateStock();
-}
-
 function evaluateStock() {
     let checkboxes = document.querySelectorAll('.chk');
     let yangCount = 0, yinCount = 0, checkedCount = 0;
@@ -246,7 +208,7 @@ function evaluateStock() {
 
     let resultEl = document.getElementById('evaluationResult');
     if (checkedCount === 0) {
-        resultEl.innerText = "Vui lòng bấm tự động phân tích để hệ thống đánh giá...";
+        resultEl.innerText = "Vui lòng tích chọn các tiêu chí thực tế để đánh giá...";
         resultEl.style.color = "var(--text-muted)";
     } else if (yangCount >= 3 && yinCount >= 3) {
         resultEl.innerText = "🌟 ÂM DƯƠNG HÒA HỢP: Cổ phiếu cơ bản tuyệt vời + Kỹ thuật dòng tiền ủng hộ. Đạt chuẩn MUA & NẮM GIỮ!";
